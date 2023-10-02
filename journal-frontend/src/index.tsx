@@ -16,19 +16,7 @@ const Root: React.FC = () => {
             console.log('UNHANDLED ERR',err)
         }
     })
-    return (
-    <ThemeProvider theme={theme}>
-    <Router>
-        <Provider store={store}>
-            <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route component={MainRootPage} />
-            </Switch>
-            <StyledToastContainer hideProgressBar autoClose={1000} />
-        </Provider>
-    </Router>
-    </ThemeProvider>
-)}
+    return <div>HELLO WORLD!!!</div>}
 
 
 const container = document.getElementById('root') as HTMLElement;
