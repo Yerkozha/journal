@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client';
 import { connect, Provider } from 'react-redux'
 import store from './redux/redux-store';
@@ -10,7 +10,13 @@ import { theme } from 'ui';
 import StyledToastContainer from './presentation/view/components/StyledToastContainer';
 import { MainRootPage } from './presentation/container/AppContainer';
 
-const Root: React.FC = () => (
+const Root: React.FC = () => {
+    useEffect(() => {
+        window.onunhandledrejection = (err) => {
+            console.log('UNHANDLED ERR',err)
+        }
+    })
+    return (
     <ThemeProvider theme={theme}>
     <Router>
         <Provider store={store}>
@@ -22,7 +28,7 @@ const Root: React.FC = () => (
         </Provider>
     </Router>
     </ThemeProvider>
-)
+)}
 
 
 const container = document.getElementById('root') as HTMLElement;
