@@ -23,8 +23,7 @@ RUN yarn global add pm2
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
-RUN npm install pg --save
+RUN yarn install
 
 # Copy the rest of the application
 COPY . .
