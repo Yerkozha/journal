@@ -25,7 +25,7 @@ const Root: React.FC = () => {
         </Router>
         </ThemeProvider>
 )}
-
+// ENV FILE INITIAL PULL!!!
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);

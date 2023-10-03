@@ -7,7 +7,7 @@ const Condition = ({match,children}:ConditionProps) => {
     if(match){
         return createElement(Fragment,{},children)
     }
-    return null
+    return <></>
 }
 
 export default Condition
