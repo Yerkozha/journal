@@ -16,6 +16,10 @@ services:
       context: ./journal-backend
       dockerfile: Dockerfile
     image: strapi-pm2:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=journal
     ports:
       - "1337:1337"
     env_file:
