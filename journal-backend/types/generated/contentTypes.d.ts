@@ -375,6 +375,11 @@ export interface ApiArticleArticle extends Schema.CollectionType {
   attributes: {
     title: Attribute.String & Attribute.Required;
     content: Attribute.RichText & Attribute.Required;
+    category: Attribute.Relation<
+      'api::article.article',
+      'manyToOne',
+      'api::category.category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -386,6 +391,42 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::article.article',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    singularName: 'category';
+    pluralName: 'categories';
+    displayName: 'category';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    articles: Attribute.Relation<
+      'api::category.category',
+      'oneToMany',
+      'api::article.article'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
       'oneToOne',
       'admin::user'
     > &
@@ -506,50 +547,6 @@ export interface PluginUploadFolder extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::upload.folder',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface PluginI18NLocale extends Schema.CollectionType {
-  collectionName: 'i18n_locale';
-  info: {
-    singularName: 'locale';
-    pluralName: 'locales';
-    collectionName: 'locales';
-    displayName: 'Locale';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    name: Attribute.String &
-      Attribute.SetMinMax<{
-        min: 1;
-        max: 50;
-      }>;
-    code: Attribute.String & Attribute.Unique;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::i18n.locale',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::i18n.locale',
       'oneToOne',
       'admin::user'
     > &
@@ -708,6 +705,50 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface PluginI18NLocale extends Schema.CollectionType {
+  collectionName: 'i18n_locale';
+  info: {
+    singularName: 'locale';
+    pluralName: 'locales';
+    collectionName: 'locales';
+    displayName: 'Locale';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.SetMinMax<{
+        min: 1;
+        max: 50;
+      }>;
+    code: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -719,12 +760,13 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::article.article': ApiArticleArticle;
+      'api::category.category': ApiCategoryCategory;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
-      'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'plugin::i18n.locale': PluginI18NLocale;
     }
   }
 }
