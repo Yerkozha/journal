@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { RouteComponentProps } from '@reach/router';
 import { useSelector } from "react-redux";
-import { selectIsAuth } from "src/redux/reducers/selectors/auth-selector";
+import { getJWT } from "src/redux/reducers/selectors/auth-selector";
 
 interface RouteProps {
     path: string
@@ -10,7 +10,7 @@ interface RouteProps {
 const ProtectedRoute: React.FC<any> = ({ component: Component, ...restOfProps }:any) => {
     
   // const isAuthenticated = localStorage.getItem("api_token");
-  const isAuth = useSelector(selectIsAuth) || sessionStorage.getItem('token')
+  const isAuth = useSelector(getJWT)
   return (
   <Route
       {...restOfProps}

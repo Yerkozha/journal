@@ -182,6 +182,21 @@ class AuthController {
     }
 
     /**
+     * 
+     * Clear the HttpOnly cookie
+     */
+    async logout(ctx: Context) {
+        console.log('LOGOUT!')
+        ctx.cookies.set("refreshToken", null, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production", 
+          maxAge: 1, 
+          sameSite: 'strict'
+        });
+        ctx.send({ message: "Logged out successfully" });
+    }
+
+    /**
      * Add refresh strategy.
      */
     async refreshToken(ctx: Context): Promise<void> {
@@ -244,11 +259,21 @@ export default (plugin: any) => {
     
     plugin.controllers.auth.callback = authController.callback.bind(authController);
     plugin.controllers.auth['refreshToken'] = authController.refreshToken.bind(authController);
+    plugin.controllers.auth['logout'] = authController.logout.bind(authController);
     
     plugin.routes['content-api'].routes.push({
         method: 'POST',
         path: '/token/refresh',
         handler: 'auth.refreshToken',
+        config: {
+            policies: [],
+            prefix: '',
+        }
+    });
+    plugin.routes['content-api'].routes.push({
+        method: 'POST',
+        path: '/auth/logout',
+        handler: 'auth.logout',
         config: {
             policies: [],
             prefix: '',

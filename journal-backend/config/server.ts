@@ -7,4 +7,13 @@ export default ({ env }) => ({
   webhooks: {
     populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
   },
+  middleware: {
+    settings: {
+      cors: {
+        enabled: true,
+        origin: ['http://localhost:8080'],
+        credentials: true,
+      },
+    },
+  },
 });

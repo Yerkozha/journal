@@ -23,6 +23,13 @@ body {
 	padding: 0 15px;
 }
 
+.truncate {
+	white-space: nowrap;      /* Prevent wrapping of text */
+	overflow: hidden;         /* Hide overflowed content */
+	text-overflow: ellipsis;  /* Display "..." for overflowed content */
+	max-width: 200px;         /* Adjust this width to your desired max width */
+  }
+
 @include b(login-header) {
 	display: flex;
 	justify-content: space-between;

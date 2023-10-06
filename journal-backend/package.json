@@ -17,6 +17,7 @@
     "@types/node": "^20.8.2",
     "better-sqlite3": "8.6.0",
     "jsonwebtoken": "^9.0.2",
+    "koa2-cors": "^2.0.6",
     "lodash": "^4.17.21",
     "pg": "^8.11.3"
   },

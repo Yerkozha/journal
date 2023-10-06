@@ -1,67 +1,31 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { AppleIcon, Box, EyeCloseIcon, EyeIcon, Facebook, Input, Instagram, LogoIcon, Text, Twitter, VK } from "ui";
+import { AppleIcon, Box, EyeCloseIcon, EyeIcon, Facebook, Input, Instagram , Text, Twitter, VK } from "ui";
 import { PlayMarket } from "ui/icons/PlayMarket";
 import { Theme } from "ui/theme/types";
 import { Controller, useForm } from 'react-hook-form';
 
-import Phone from "../../../assets/images/phone-login.png";
-
 import { Header } from "../components";
 import { Button } from "ui/btn";
-import { useDispatch } from "react-redux";
-import {login} from '../../../redux/reducers/auth-reducer'
+import { login } from '../../../redux/reducers/auth-reducer'
+import { getArticles } from '../../../redux/reducers/articles-reducer'
 import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectIsAuth } from "src/redux/reducers/selectors/auth-selector";
+import { getJWT } from "src/redux/reducers/selectors/auth-selector";
+import {
+  WrapperLeftSide,
+  WrapperRightSide,
+  ListSocials,
+  FormSide,
+  InnerForm
+} from "./styles";
+import { useAppDispatch } from "src/redux/redux-store";
+import { toast } from "react-toastify";
+import { useInterceptors } from "src/utils/helpers";
 
-const WrapperLeftSide = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  padding: 40px 80px;
-  background-color: ${props => props.theme.colorList.brand[0]};
-`
-const WrapperRightSide = styled.div`
-  display: flex;
-  flex-direction: column;
-  
-`
-const ListSocials = styled.ul`
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
-`
-const FormSide = styled.div`
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  position: relative;
-`
-const InnerForm = styled.div`
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 400px;
-  width: 100%;
-  transform: translate(-50%, -50%);
-  input {
-    padding: 9px 15px;
-    border: none;
-    outline: 1px solid #E4E9F2;
-    border-radius: 6px;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    button {
-      margin-top: 20px;
-    }
-  }
-  
-`
+
+
+
 type FormData = {
   username: string;
   password: string;
@@ -72,28 +36,50 @@ export const Login: React.FC = () => {
   const [showPass, setShowPass] = useState(true)
   const [loading, setLoading] = useState<boolean>(false);
   const { handleSubmit, control, formState: { errors } } = useForm<FormData>();
-  const dispatch = useDispatch()
+
   const history = useHistory();
 
-  const isAuth = useSelector(selectIsAuth)
-  
-  const onSubmit = ({username,password} : {username: string,password: string}) => {
-    setLoading(true)
-    // @ts-ignore
-    dispatch(login(username,password))
-    
+  const dispatch = useAppDispatch();
+  useInterceptors();
+
+  const JWT = useSelector(getJWT)
+
+  const onSubmit = ({ username, password }: { username: string, password: string }) => {
+
+    setLoading(true);
+
+    dispatch(login(username, password)).then((data) => {
+      toast.success("Success!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      history.push('/');
+    }).catch((err) => {
+      if( err.response.status == 400 ) {
+        return toast.error('Invalid credentials!')
+      }
+      toast.error('Error')
+    }).finally(() => {
+      setLoading(false);
+    })
+
   }
+
   useEffect(() => {
-    if(isAuth){
-      history.push('/')
-    }
-  },[isAuth])
+
+    dispatch(getArticles()).then((articles) => {
+      if( JWT ) {
+        history.push('/');
+      }
+      
+    }).catch(() => {})
+    
+  },[JWT])
+
 
   return (
     <Box display="grid" gridTemplateColumns="1fr 1.5fr" height="100vh">
 
       <WrapperLeftSide>
-        <LogoIcon></LogoIcon>
         <Box display="flex" flexDirection="column" gap='20px'>
           <Text
             as="h1"
@@ -103,12 +89,18 @@ export const Login: React.FC = () => {
             lineHeight="24px"
             maxWidth="350px"
             color={theme.colorList.white[0]}
-          >Больше возможностей в мобильном приложении RBK Online</Text>
+          >Welcome to Journal</Text>
           <Box display="flex" justifyContent="space-between" width="400px">
             <AppleIcon color={theme.colorList.white[0]}></AppleIcon>
             <PlayMarket color={theme.colorList.white[0]}></PlayMarket>
           </Box>
-          <img src={Phone} alt="Phone" style={{ width: '69%' }} />
+          <Box display='flex' flexDirection='column' color='#fff'>
+            Test 
+            <Text
+              color={theme.colorList.white[0]}>login: tet@gmail.com</Text>
+            <Text 
+                color={theme.colorList.white[0]}>password: Qwerty123</Text>
+          </Box>
           <ListSocials>
             <li><Facebook></Facebook></li>
             <li><VK></VK></li>
@@ -172,7 +164,7 @@ export const Login: React.FC = () => {
                 loader={loading}
               />
               <Text mt={2} textAlign="center" fontSize="14px" fontWeight="400" color="#8F9BB3">
-              Нажимая кнопку “Войти” вы соглашаетесь с <Link style={{color: "#3DBCCC"}} to='/'>пользовательским соглашением</Link> 
+                Нажимая кнопку “Войти” вы соглашаетесь с <Link style={{ color: "#3DBCCC" }} to='/'>пользовательским соглашением</Link>
               </Text>
             </form>
           </InnerForm>

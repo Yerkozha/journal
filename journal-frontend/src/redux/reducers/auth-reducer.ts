@@ -1,13 +1,13 @@
-import { authAPI } from 'src/api/auth';
+import { authAPI, RefreshType, User } from 'src/api/auth';
+import { APIResponceType } from 'src/api/api';
 import { BaseThunkType, InferActionsTypes } from '../redux-store';
 
 let initialState = {
-    access: '',
-    refresh: '',
+    jwt: '',
     user: {}
 };
 
-export type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState & APIResponceType<User>;
 type ActionsType = InferActionsTypes<typeof actions>
 type ThunkType = BaseThunkType<ActionsType>
 
@@ -16,7 +16,12 @@ const appReducer = (state = initialState, action: ActionsType): InitialStateType
         case 'ARM_WEB/auth/LOGIN':
             return {
                 ...state,
-                ...action.payload
+                ...action.payload,
+            }
+        case 'ARM_WEB/auth/REFRESH':
+            return {
+                ...state,
+                jwt: action.jwt
             }
         default:
             return state;
@@ -24,13 +29,26 @@ const appReducer = (state = initialState, action: ActionsType): InitialStateType
 }
 
 export const actions = {
-    setAuthUser: (payload: { access: string, refresh: string, user: object }) => ({ type: 'ARM_WEB/auth/LOGIN', payload } as const)
+    setAuthUser: <T extends Awaited<ReturnType<typeof authAPI.login>>>(payload: T extends {data: infer V} ? V : never  ) => ({ type: 'ARM_WEB/auth/LOGIN', payload } as const),
+    setToken: (jwt: string ) => ({ type: 'ARM_WEB/auth/REFRESH',jwt } as const)
 }
-export const login = (username: string, password: string): ThunkType => async (dispatch: any) => {
+export const login = (username: string, password: string): ThunkType => async (dispatch: any): Promise<InitialStateType> => {
     const { data } = await authAPI.login(username, password)
-  
     dispatch(actions.setAuthUser(data));
-    sessionStorage.setItem('token', data.access)
+    return data
+}
+export const logout = (): ThunkType => async (dispatch: any): Promise<unknown> => {
+    const { data } = await authAPI.logout()
+    console.log(data,' LOGOUT DATA')
+    dispatch(actions.setAuthUser({jwt: '', user: {}}));
+    return data
+}
+export const getRefreshToken = (): ThunkType => async (dispatch: any): Promise<RefreshType> => {
+    const { data } = await authAPI.refreshToken();
+
+    dispatch(actions.setToken(data.jwt));
+
+    return data
 }
 
 export default appReducer;

@@ -24,6 +24,7 @@ COPY package*.json ./
 
 # Install dependencies
 RUN yarn install
+RUN yarn install pg --save
 
 # Copy the rest of the application
 COPY . .
