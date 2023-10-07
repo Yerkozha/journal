@@ -23,13 +23,14 @@ RUN yarn global add pm2
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
-RUN npm install pg --save
+RUN yarn install
+RUN yarn add pg --save
 
 # Copy the rest of the application
 COPY . .
 
-RUN yarn build
+#RUN yarn build
+CMD ["yarn", "build"]
 
 # Expose the Strapi port yarn start / build
 EXPOSE 1337
