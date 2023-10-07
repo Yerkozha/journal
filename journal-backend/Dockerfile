@@ -29,8 +29,7 @@ RUN yarn add pg --save
 # Copy the rest of the application
 COPY . .
 
-#RUN yarn build
-CMD ["yarn", "build"]
+RUN yarn build
 
 # Expose the Strapi port yarn start / build
 EXPOSE 1337
