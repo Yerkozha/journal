@@ -1,11 +1,13 @@
 import axios from 'axios'
 
 export const instance = axios.create({
-    baseURL: 'https://apiarm.kazincombank.kz/api/v1/',
+    baseURL: 'api/'
+})
+export const instancePublic = axios.create({
+    baseURL: 'api/'
 })
 
 export type APIResponceType<D = {}> = {
-    access: string
-    refresh: string
-    user: D
+    jwt: string
+    user: D | {}
 }

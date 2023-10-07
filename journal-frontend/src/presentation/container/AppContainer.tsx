@@ -15,13 +15,9 @@ type DispatchPropsType = {
 
 
 class AppContainer extends Component<MapPropsType & DispatchPropsType> {
-    catchAllUnhandledErrors = (e: PromiseRejectionEvent) => {
-        alert('Some error occured')
-    }
 
     componentDidMount() {
-        this.props.initializeApp()
-        
+        this.props.initializeApp();
     }
 
     componentWillUnmount() {

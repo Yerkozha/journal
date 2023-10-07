@@ -150,12 +150,15 @@ const Card = styled.div.attrs<CardStyleProps>((props) => ({
     display: flex;
     gap: 10px;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
+    &:hover {
+        cursor: help;
+    }
     *:not(svg){
         z-index: 2;
     }
-    div:nth-child(2){
-        margin: 10px 0;
+    & div:nth-child(1){
+        justify-self: flex-start;
     }
     & .card-slider__icon{
         position: absolute;

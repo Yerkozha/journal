@@ -9,21 +9,29 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from 'ui';
 import StyledToastContainer from './presentation/view/components/StyledToastContainer';
 import { MainRootPage } from './presentation/container/AppContainer';
+import 'react-toastify/dist/ReactToastify.min.css';
+import ErrorBoundary from './routes/ErrorHandler';
 
 const Root: React.FC = () => {
     
     return (
+        
         <ThemeProvider theme={theme}>
-        <Router>
-            <Provider store={store}>
-                <Switch>
-                    <Route exact path="/login" component={Login} />
-                    <Route component={MainRootPage} />
-                </Switch>
-                <StyledToastContainer hideProgressBar autoClose={1000} />
-            </Provider>
-        </Router>
+            <ErrorBoundary>
+            <Router>
+                <Provider store={store}>
+                    
+                        <Switch>
+                            <Route exact path="/login" component={Login} />
+                            <Route component={MainRootPage} />
+                        </Switch>
+                    
+                    <StyledToastContainer hideProgressBar autoClose={1000} />
+                </Provider>
+            </Router>
+        </ErrorBoundary>
         </ThemeProvider>
+        
 )}
 // ENV FILE INITIAL PULL!!!
 

@@ -1,7 +1,9 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
+import { logout } from 'src/redux/reducers/auth-reducer'
+import { useAppDispatch } from 'src/redux/redux-store'
 import styled, { useTheme } from 'styled-components'
-import { ArrowDown, Bell, Box, LogoIcon, Text } from 'ui'
+import { ArrowDown, Bell, Box, Button, Text } from 'ui'
 import { Theme } from 'ui/theme/types'
 import { Language } from '../language'
 
@@ -42,22 +44,28 @@ const ToolBar = styled(NavigationBar)`
 
 const MainHeader = () => {
 
-    const theme = useTheme() as Theme
+    const theme = useTheme() as Theme;
+    const dispatch = useAppDispatch()
+
+    function logoutHandler() {
+        dispatch(logout())
+    }
 
     return (
         <Box className="header">
-            <NavigationBar>
-                <LogoIcon color={theme.colorList.logo[0]}></LogoIcon>
-                <li><CustomLinkStyled toPath="/transfer">Переводы</CustomLinkStyled></li>
-                <li><CustomLinkStyled toPath="/transfer">Платежи</CustomLinkStyled></li>
-                <li><CustomLinkStyled toPath="/transfer">Открыть продукт</CustomLinkStyled> <span><ArrowDown className='header__arrow-icon' /></span></li>
-                <li><CustomLinkStyled toPath="/transfer">Контакты</CustomLinkStyled></li>
-            </NavigationBar>
             <ToolBar>
                 <li><Language maxHeight="30px"></Language></li>
-                <li><Bell className='header__arrow-icon'></Bell></li>
-                <li><Text>Захаров А.</Text><span><ArrowDown className='header__arrow-icon' /></span></li>
             </ToolBar>
+            <NavigationBar>
+                <Button 
+                        height="100%"
+                        color={theme.colorList.white[0]}
+                        bgColor={theme.colorList.system[0]}
+                        text='Logout'
+                        borderRadius={theme.borderRadius.s}
+                        onClick={logoutHandler}
+                         ></Button>
+            </NavigationBar>
         </Box>
     )
 }

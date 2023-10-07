@@ -17,6 +17,16 @@ module.exports = {
         client: {
             overlay: true,
         },
+        proxy: {
+            '/api': {
+               
+                target: 'http://localhost:1338',
+                
+                secure: false,
+                changeOrigin: true,
+                proxyTimeout: 5 * 60 * 1000,
+                timeout: 5 * 60 * 1000,
+            }}
     },
     target: "web",
     output: {

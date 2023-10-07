@@ -56,18 +56,19 @@ const Language: FC<HeaderProps> = ( {maxHeight} ) => {
     const [showModal, setShowModal] = useState<boolean>(false)
     const [language, setLanguage] = useState<string>('RU')
 
-    const languageSelectedHandle = (ev: any) => {
-        setLanguage(ev.target.dataset.value)
+    const languageSelectedHandle = (ev: React.MouseEvent<HTMLElement>) => {
+        const target = ev.target as HTMLElement;
+        setLanguage(target.dataset.value!);
     }
-    const outEffectHandler = (ev: any) => {
-
-        if(ev.target.dataset.lang !== 'language'){
+    const outEffectHandler: any = (ev:  React.MouseEvent<HTMLElement, MouseEvent>) => {
+        const target = ev.target as HTMLElement;
+        if(target.dataset.lang !== 'language'){
             setShowModal(false)
         }
 
     }
     useEffect(() => {
-        window.addEventListener( 'click', outEffectHandler )
+        addEventListener( 'click', outEffectHandler )
         return () => {
             removeEventListener( 'click', outEffectHandler )
         }

@@ -11,10 +11,15 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@strapi/strapi": "4.14.0",
-    "@strapi/plugin-users-permissions": "4.14.0",
     "@strapi/plugin-i18n": "4.14.0",
-    "better-sqlite3": "8.6.0"
+    "@strapi/plugin-users-permissions": "4.14.0",
+    "@strapi/strapi": "4.14.0",
+    "@types/node": "^20.8.2",
+    "better-sqlite3": "8.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "koa2-cors": "^2.0.6",
+    "lodash": "^4.17.21",
+    "pg": "^8.11.3"
   },
   "author": {
     "name": "A Strapi developer"
